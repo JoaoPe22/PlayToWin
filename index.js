@@ -93,14 +93,46 @@ const client = new Client({
 //     });
 // }
 
-// require("dotenv").config();
+
+
+// require ("dotenv").config();
 // const conn = require("./db/conn");
 
+// const Usuario =  require("./models/usuario");
+
+// const express = require ("express");
+//   const app = express();
+
+//   app.use(
+//     express.urlencoded({
+//       extended: true,
+//     })
+//   )
+
+//   app.get("/usuarios/novo", (req,res) => {
+//     res.sendFile(`${__dirname}/views/novo-usuario.html`)
+//   })
+
+//   app.post("/usuarios/novo" , async(req,res) => {
+//     const nickname = req.body.nickname;
+//     const nome = req.body.nome;
+
+//     const dadosUsuario = {
+//       nickname,
+//       nome,
+//     };
+
+//     const usuario = await Usuario.create(dadosUsuario);
+//     res.send("Usuário inserido: " + usuario.id)
+//   });
+
+//   app.listen(8000);
+
 // conn
-//   .authenticate()
+//   .sync()
 //   .then(() => {
-//     console.log("Conectado com Sucesso conn");
+//     console.log("Conectado com sucesso :)");
 //   })
 //   .catch((err) => {
-//     console.log("Ocorreu um erro: " + err);
+//     console.log("Erro ao conectar: " + err);
 //   });
