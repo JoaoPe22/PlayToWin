@@ -3,6 +3,27 @@
 const { Client } = require("pg");
 require("dotenv").config();
 
+// Importando e instanciando o express
+const express = require("express");
+const app = express();
+
+//Adicionando Middlewares
+app.use(
+  express.urlencoded({
+    extended: true,
+  })
+);
+
+app.use(express.json());
+
+//Adicionando a rota get para “/usuarios/novo”
+app.get("/usuarios/novo", (req, res) => {
+  res.sendFile(`${__dirname}/views/novo-usuario.html`);
+});
+
+//Inicializando o Servidor
+app.listen(3000);
+
 const client = new Client({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
@@ -16,7 +37,7 @@ client
   .connect()
   .then(() => {
     console.log("Conectando ao banco de dados");
-    exibeUsuariosCadastrados();
+    // exibeUsuariosCadastrados();
   })
   .catch((err) => {
     console.log(`Erro: ${err}`);
@@ -24,25 +45,25 @@ client
 
 //Testando Conexão
 //Buscando os usuarios da tabela usuarios:
-function exibeUsuariosCadastrados() {
-  client.query("select * from usuarios", (err, result) => {
-    if (err) {
-      console.error("Erro ao executar a busca:" + err);
-    } else {
-      console.log("Resultado:" + JSON.stringify(result.rows));
-    }
-    fechaConexao();
-  });
-}
+// function exibeUsuariosCadastrados() {
+//   client.query("select * from usuarios", (err, result) => {
+//     if (err) {
+//       console.error("Erro ao executar a busca:" + err);
+//     } else {
+//       console.log("Resultado:" + JSON.stringify(result.rows));
+//     }
+//     fechaConexao();
+//   });
+// }
 
 // Function para encerrar a conexão depois que utilizá-la:
-function fechaConexao() {
-  client
-    .end()
-    .then(() => {
-      console.log("Conexão Encerrada!");
-    })
-    .catch((err) => {
-      console.error("Erro ao encerrar conexão:", err);
-    });
-}
+// function fechaConexao() {
+//   client
+//     .end()
+//     .then(() => {
+//       console.log("Conexão Encerrada!");
+//     })
+//     .catch((err) => {
+//       console.error("Erro ao encerrar conexão:", err);
+//     });
+// }
