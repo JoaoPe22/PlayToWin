@@ -17,12 +17,32 @@ app.use(
 app.use(express.json());
 
 //Adicionando a rota get para “/usuarios/novo”
+app.get("/", (req, res) => {
+  res.redirect("/usuarios/novo");
+});
+
 app.get("/usuarios/novo", (req, res) => {
   res.sendFile(`${__dirname}/views/novo-usuario.html`);
 });
 
 //Inicializando o Servidor
-app.listen(3000);
+app.listen(8000, () => {
+  console.log("Server ouvindo na porta 8000");
+});
+
+//Receber os dados do formulário
+app.post("/usuarios/novo", (req, res) => {
+  const nick = req.body.nickname;
+  const nome = req.body.nome;
+
+  client.query(
+    `INSERT INTO usuarios (usuario_nickname, usuario_nome)
+    VALUES ('${nick}', ''${nome}) returning *`,
+    (err, result) => {
+      // callback
+    }
+  );
+});
 
 const client = new Client({
   user: process.env.DB_USER,
