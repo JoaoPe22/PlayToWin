@@ -25,11 +25,6 @@ app.get("/usuarios/novo", (req, res) => {
   res.sendFile(`${__dirname}/views/novo-usuario.html`);
 });
 
-//Inicializando o Servidor
-app.listen(8000, () => {
-  console.log("Server ouvindo na porta 8000");
-});
-
 //Receber os dados do formulário
 app.post("/usuarios/novo", (req, res) => {
   const nick = req.body.nickname;
@@ -37,11 +32,20 @@ app.post("/usuarios/novo", (req, res) => {
 
   client.query(
     `INSERT INTO usuarios (usuario_nickname, usuario_nome)
-    VALUES ('${nick}', ''${nome}) returning *`,
+    VALUES ('${nick}', '${nome}') returning *`,
     (err, result) => {
-      // callback
+      if (err) {
+        res.send("Erro: " + err);
+      } else {
+        res.send("Sucesso, veja os dados: " + JSON.stringify(result.rows));
+      }
     }
   );
+});
+
+//Inicializando o Servidor
+app.listen(8000, () => {
+  console.log("Server ouvindo na porta 8000");
 });
 
 const client = new Client({
@@ -50,18 +54,19 @@ const client = new Client({
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
   database: process.env.DB_NAME,
+  dialect: process.env.DB_DIALECT,
 });
 
-// Chamando o método connect() do client:
-client
-  .connect()
-  .then(() => {
-    console.log("Conectando ao banco de dados");
-    // exibeUsuariosCadastrados();
-  })
-  .catch((err) => {
-    console.log(`Erro: ${err}`);
-  });
+// // Chamando o método connect() do client:
+// client
+//   .connect()
+//   .then(() => {
+//     console.log("Conectando ao banco de dados");
+//     // exibeUsuariosCadastrados();
+//   })
+//   .catch((err) => {
+//     console.log(`Erro: ${err}`);
+//   });
 
 //Testando Conexão
 //Buscando os usuarios da tabela usuarios:
@@ -87,3 +92,15 @@ client
 //       console.error("Erro ao encerrar conexão:", err);
 //     });
 // }
+
+// require("dotenv").config();
+// const conn = require("./db/conn");
+
+// conn
+//   .authenticate()
+//   .then(() => {
+//     console.log("Conectado com Sucesso conn");
+//   })
+//   .catch((err) => {
+//     console.log("Ocorreu um erro: " + err);
+//   });
